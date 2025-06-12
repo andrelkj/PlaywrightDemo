@@ -1,0 +1,25 @@
+# Rider
+.idea/
+*.sln.iml
+
+# System
+.DS_Store
+Thumbs.db
+
+# Build output
+bin/
+obj/
+
+# User-specific
+*.user
+*.userosscache
+*.suo
+*.sdf
+*.cache
+*.dbmdl
+
+# Logs
+*.log
+
+# Others
+.vscode/

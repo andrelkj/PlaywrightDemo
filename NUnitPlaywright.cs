@@ -14,12 +14,15 @@ public class  NUnitPlaywright : PageTest
     [Test]
     public async Task Login()
     {
+        Page.SetDefaultTimeout(10000);
+        // Using CSS-based Locator
         var lnkLogin = Page.Locator("text=Login");
         await lnkLogin.ClickAsync();
         
         await Page.FillAsync("#UserName", "admin");
         await Page.FillAsync("#Password", "password");
         
+        // Using Text-based Page Locator Options
         var btnLogin = Page.Locator("input", new PageLocatorOptions{HasTextString = "Log in"});
         await btnLogin.ClickAsync();
         

@@ -1,4 +1,5 @@
-﻿using Microsoft.Playwright;
+﻿using System.Web;
+using Microsoft.Playwright;
 using PlaywrightDemo.Pages;
 
 namespace PlaywrightDemo;
@@ -91,5 +92,38 @@ public class  Tests
         // Verify login
         var isExist = await loginPage.IsEmployeeDetailsVisible();
         Assert.That(isExist);
+    }
+
+    [Test]
+    public async Task Flipkart()
+    {
+        // Playwright
+        using var playwright = await Playwright.CreateAsync();
+        // Browser
+        await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+        {
+            Headless = false,
+        });
+        // Page
+        var page = await browser.NewPageAsync();
+        await page.GotoAsync("https://www.flipkart.com/", new PageGotoOptions
+        {
+            WaitUntil = WaitUntilState.NetworkIdle
+        });
+
+        await page.Locator("text=x").ClickAsync();
+        await page.Locator("a", new PageLocatorOptions
+        {
+            HasTextString = "Login"
+        }).ClickAsync();
+        
+        // Validate analytics events
+        var request = await page.RunAndWaitForRequestAsync(async () =>
+        {   
+            await page.Locator("text=x").ClickAsync();
+        }, x => x.Url.Contains("flipkart.d1.sc.omtrdc.net") && x.Method == "GET");
+
+        var returnData = HttpUtility.UrlDecode(request.Url);
+        returnData.Should().Contain("Account Login:Display Exit");
     }
 }
